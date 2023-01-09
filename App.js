@@ -14,6 +14,7 @@ export default function App() {
 
   const [userNumber, setUserNumber] = useState();
   const [gameIsOver, setGameIsOver] = useState(true);
+  const [guessRounds, setGuessRounds]= useState()
 
   const [fontsLoaded] = useFonts({
     'roboto-regular': require('./assets/fonts/Roboto-Regular.ttf'),
@@ -33,6 +34,11 @@ export default function App() {
     setGameIsOver(true);
   }
 
+  function startNewGameHandler() {
+      setUserNumber(null);
+      setGuessRounds(0);
+  }
+
   let screen = <StartGameScreen onPickedNumber={pickedNumberHandler} />;
 
   if(userNumber) {
@@ -40,7 +46,7 @@ export default function App() {
   }
 
   if(gameIsOver && userNumber){
-    screen = <GameOverScreen />
+    screen = <GameOverScreen userNumber={userNumber} onStartNewGame={startNewGameHandler} roundsNumber={guessRounds} />
   }
 
   return (
