@@ -1,0 +1,37 @@
+import React from 'react'
+import { Text, View, StyleSheet, Image } from 'react-native'
+import { Colors } from 'react-native/Libraries/NewAppScreen'
+
+
+function GuessLogItem({roundNumber, guess }) {
+  return (
+    <View style={styles.listItem}>
+        <Text>#{roundNumber}</Text>
+        <Text>Opponent's Guess: {guess}</Text>
+    </View>
+  )
+}
+
+export default GuessLogItem
+
+const styles = StyleSheet.create({
+    listItem: {
+        borderColor: Colors.primary800,
+        borderWidth: 1,
+        borderRadius: 24,
+        padding: 12,
+        marginVertical: 8,
+        backgroundColor: Colors.accent500,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        shadowOffset: {width: 0, height: 0},
+        elevation: 4,
+        shadowColor: 'black',
+        shadowOpacity: 0.25,
+        shadowRadius: 3,
+    },
+    itemText: {
+        fontFamily: 'roboto-light'
+    }
+})
