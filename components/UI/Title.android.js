@@ -1,7 +1,7 @@
 import React from 'react'
-import { Text, StyleSheet, View } from 'react-native'
+import { Text, StyleSheet, View, Platform } from 'react-native'
 
-import Colors from '../../constants/Colors'
+import Colors from '../../constants/Colors.ios'
 
 
 function Title({children}) {
@@ -20,6 +20,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: "white",
         textAlign: 'center',
+        // borderWidth: Platform.OS === 'android' ? 2 : 0,
+        // borderWidth: Platform.select({ios: 0, android: 0}),
         borderWidth: 2,
         borderColor: "white",
         padding: 2,

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Text, StyleSheet, View, Alert, FlatList } from 'react-native'
+import { Text, StyleSheet, View, Alert, FlatList, useWindowDimensions } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
 import Title from '../components/UI/Title'
@@ -31,6 +31,8 @@ function GameScreen({userNumber, onGameOver}) {
     const initialGuess = generateRandomBetween( 1, 100, userNumber )
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
     const [guessRounds, setGuessRounds]= useState([initialGuess])
+
+    const { width, height } = useWindowDimensions();
 
 
     useEffect(() => {
@@ -67,6 +69,50 @@ function GameScreen({userNumber, onGameOver}) {
 
     const guessRoundListLength = guessRounds.length;
 
+    let content = (
+        <>
+            <NumberContainer>{currentGuess}</NumberContainer>
+
+            <Card>
+                <InstructionText style={styles.instructionText}>Higher or Lower?</InstructionText>
+                {/* + - */}
+                <View style={styles.buttonsContainer}>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={nextGuessHandler.bind(this, "greater")} >
+                            <Ionicons name="md-add" size={24} color="white" />
+                        </PrimaryButton>
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={nextGuessHandler.bind(this, "lower")} >
+                            <Ionicons name="md-remove" size={24} color="white" />
+                        </PrimaryButton>
+                    </View>
+                </View>
+            </Card>
+        </>
+    );
+
+    if(width > 500) {
+        content = (
+            <>
+                <InstructionText style={styles.instructionText}>Higher or Lower?</InstructionText>
+                <View style={styles.buttonsContainerWide}>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={nextGuessHandler.bind(this, "greater")} >
+                            <Ionicons name="md-add" size={24} color="white" />
+                        </PrimaryButton>
+                    </View>
+                    <NumberContainer>{currentGuess}</NumberContainer>
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton onPress={nextGuessHandler.bind(this, "lower")} >
+                            <Ionicons name="md-remove" size={24} color="white" />
+                        </PrimaryButton>
+                    </View>
+                </View>
+            </>
+        )
+    }
+
 
   return (
     <View style={styles.screen}>
@@ -74,30 +120,17 @@ function GameScreen({userNumber, onGameOver}) {
 
         {/* GUESS  */}
 
-        <NumberContainer>{currentGuess}</NumberContainer>
-
-        <Card>
-            <InstructionText style={styles.instructionText}>Higher or Lower?</InstructionText>
-            {/* + - */}
-            <View style={styles.buttonsContainer}>
-                <View style={styles.buttonContainer}>
-                    <PrimaryButton onPress={nextGuessHandler.bind(this, "greater")} >
-                        <Ionicons name="md-add" size={24} color="white" />
-                    </PrimaryButton>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <PrimaryButton onPress={nextGuessHandler.bind(this, "lower")} >
-                        <Ionicons name="md-remove" size={24} color="white" />
-                    </PrimaryButton>
-                </View>
-            </View>
-        </Card>
+        {content}
         <View style={styles.listContainer}>
             {/* LOG ROUND */}
             {/* {guessRounds.map(guessRound => <Text key={guessRound} >{guessRound}</Text>)} */}
             <FlatList 
                 data={guessRounds}
-                renderItem={(itemData) => <GuessLogItem roundNumber={guessRoundListLength - itemData.index} guess={itemData.item} /> }
+                renderItem=
+                {(itemData) => <GuessLogItem 
+                    roundNumber={guessRoundListLength - itemData.index} 
+                    guess={itemData.item} /> 
+                }
                 keyExtractor={(item) => item }  
             />
         </View>
@@ -121,6 +154,10 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         flex: 1,
+    },
+    buttonsContainerWide: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     listContainer: {
         flex: 1,
